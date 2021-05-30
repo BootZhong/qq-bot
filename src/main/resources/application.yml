@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+spring:
+  bot:
+    plugin-list: # 配置插件列表（有序），如果插件返回0，继续执行剩余插件，如果插件返回1，终止剩余插件执行
+      - top.bootzhong.qqbot.plugin.LogPlugin # 日志插件
+      - top.bootzhong.qqbot.plugin.FriendAddRequestPlugin # 自动接受好友邀请
+
+  datasource:
+    username: root
+    password: illya0415
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://bootzhong.top:3306/qqbot?useUnicode=true&charaterEncoding=UTF-8&serverTimezone=UTC
+
+#mybatis
+mybatis:
+  mapper-locations: classpath:dao/*.xml
