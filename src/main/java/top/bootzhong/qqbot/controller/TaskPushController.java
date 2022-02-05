@@ -7,19 +7,38 @@ import top.bootzhong.qqbot.common.ServerResponse;
 import top.bootzhong.qqbot.entity.Task;
 import top.bootzhong.qqbot.service.TaskService;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/qqbot")
 public class TaskPushController {
     @Autowired
-    TaskService taskService;
+    private TaskService taskService;
 
+    private volatile long lastPushTime = 0;
 
     @PostMapping("/push")
     public String demo(@RequestBody Task task) {
         if (CollectionUtils.isEmpty(task.getRecList())){
             return "recList is not allow to be null";
         }
+
+        //两次推送的间隔不能超过50
+        synchronized (this){
+            long now = System.currentTimeMillis();
+            if (now - lastPushTime < 50){
+                try {
+                   Thread.sleep(50);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+            }
+            lastPushTime = now;
+        }
+
         taskService.push(task);
         return "ok";
     }
