@@ -6,11 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import top.bootzhong.qqbot.common.ServerResponse;
 import top.bootzhong.qqbot.entity.Task;
 import top.bootzhong.qqbot.service.TaskService;
+
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.SynchronousQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/qqbot")

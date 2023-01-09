@@ -24,7 +24,7 @@ public class TaskServiceImpl implements TaskService {
     private TaskMapper taskMapper;
     @Autowired
     BotContainer botContainer;
-    private static final Long BOT = 2284420486L;
+    private static final Long BOT = 3381391605L;
 
     /**
      * 通过事务管理保证一致性
@@ -47,11 +47,6 @@ public class TaskServiceImpl implements TaskService {
         }
 
         Bot bot = botContainer.getBots().get(BOT);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         Msg msg = Msg.builder().text(task.getTxt());
         if (!StringUtils.isEmpty(task.getImg())) {
