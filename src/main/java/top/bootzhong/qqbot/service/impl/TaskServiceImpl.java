@@ -30,7 +30,7 @@ public class TaskServiceImpl implements TaskService {
      * 通过事务管理保证一致性
      * @param task
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void push(Task task) {
         //保证幂等性  每次执行逻辑前先对该记录进行数据库插入 若是数据库已经存在 则退出
@@ -38,6 +38,11 @@ public class TaskServiceImpl implements TaskService {
 
         String rec = ListUntil.join(recList);
         task.setRec(rec);
+
+        if (task.getId() == null){
+            task.setId(System.currentTimeMillis());
+        }
+
         //插入数据库
         try{
             taskMapper.insert(task);
@@ -49,11 +54,11 @@ public class TaskServiceImpl implements TaskService {
         Bot bot = botContainer.getBots().get(BOT);
 
         Msg msg = Msg.builder().text(task.getTxt());
-        if (!StringUtils.isEmpty(task.getImg())) {
+        if (StringUtils.hasText(task.getImg())) {
             msg.image(task.getImg());
         }
 
-        recList.stream().forEach(e -> {
+        recList.forEach(e -> {
             if (e != null) {
                 bot.sendPrivateMsg(e, msg, false);
             }
